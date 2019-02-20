@@ -1,0 +1,12 @@
+Data
+X-Read in data
+ -Match data regions
+ -Downsample
+Implementation
+ -Understand
+ -Wavelet transform
+ -Adaptive thresholding
+ -Homomorphic/other components
+ -Inverse wavelet transform
+Testing
+
