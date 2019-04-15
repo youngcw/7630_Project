@@ -1,0 +1,34 @@
+function out=wrec(img,G,H)
+img=squeeze(img);
+out=zeros(size(img,2),size(img,3));
+s2=size(G,2);
+for z=1:4
+    temp=[];
+    Q=zeros(size(out)); %each quadrant is the size of the original
+    if z==1 || z== 2
+        f=H;
+    else
+        f=G;
+    end
+
+    for i=1:size(Q,1) %horizontal filter
+        temp=cconv(f,img(z,i,:));
+        Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
+    end
+    
+    temp=[];
+    Q=Q';
+    if z==2 || z== 4
+        f=G;
+    else
+        f=H;
+    end
+    for i=1:size(Q,1) %vert filt
+        temp=cconv(f,img(z,:,i));
+        Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
+    end
+    Q=Q';
+    out=out+Q./4;
+end
+
+end
