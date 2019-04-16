@@ -1,14 +1,17 @@
 function dhat=adapThresh(d, mthresh)
-[M,N,J,I]=size(d); %#ok<*ASGLU>
-sig2=median(d(:))/0.674;
-dhat=zeros(size(d));
+[J, I, M, N]=size(d); %#ok<*ASGLU>
+sig2=median(d(:))/0.6745;
+dhat=d;
 
-for i=1:I
+for i=2:I
     for j=1:J
         lambda=sqrt(sig2)*sqrt(2*log(M*N))/log(j+1);
+
+%         dj=d(i,j,:,:);
+%         lambda=sqrt(median(dj(:)/0.674))*sqrt(2*log(M*N))/log(j+1);
         for m=1:M
             for n=1:N
-                dhat(m,n,i,j)=softThresh(d(m,n,i,j),mthresh,lambda);
+                dhat(j,i,m,n)=softThresh(d(j,i,m,n),mthresh,lambda);
             end
         end
     end

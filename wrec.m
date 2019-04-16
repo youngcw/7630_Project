@@ -12,8 +12,11 @@ for z=1:4
     end
 
     for i=1:size(Q,1) %horizontal filter
-        temp=cconv(f,img(z,i,:));
-        Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
+%         temp=cconv(f,img(z,i,:));
+%         Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
+        pline=[repmat(img(z,i,1),[1 1+(s2-1)/2]) squeeze(img(z,i,:)).' repmat(img(z,i,end),[1 (s2-1)/2])];
+        temp=cconv(f,pline);
+        Q(i,:)=temp(s2:end-s2);
     end
     
     temp=[];
@@ -24,8 +27,11 @@ for z=1:4
         f=H;
     end
     for i=1:size(Q,1) %vert filt
-        temp=cconv(f,img(z,:,i));
-        Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
+%         temp=cconv(f,img(z,:,i));
+%         Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
+        pline=[repmat(img(z,1,i),[1 1+(s2-1)/2]) squeeze(img(z,:,i)) repmat(img(z,end,i),[1 (s2-1)/2])];
+        temp=cconv(f,pline);
+        Q(i,:)=temp(s2:end-s2);
     end
     Q=Q';
     out=out+Q./4;
