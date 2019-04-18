@@ -34,7 +34,7 @@ for z=1:4
         Q(i,:)=temp(s2:end-s2);
     end
     Q=Q';
-    out=out+Q./4;
+    out=out+Q./(4);
 end
 
 end
