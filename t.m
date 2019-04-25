@@ -1,9 +1,13 @@
 % clear; close all;
-J=6; %number of decompositions to do
+J=5; %number of decompositions to do
 load('ims.mat');
-% load('filter_coeffs.mat');
-h=[1 1];
-g=[1 -1];
+load('filter_coeffs.mat');
+% h=[1 1];
+% g=[1 -1];
+% wv = 'bior3.5';
+% [Rf,Df] = biorwavf(wv);
+% [g,h,LoR,HiR] = biorfilt(h,h);
+rng(3);
 g=g/norm(g); %need to be normalized to 1
 h=h/norm(h);
 g=[0 g];
@@ -12,10 +16,12 @@ jtbx=log2(256)-J;
 cfg.ti=1;
 % figure(1); imagesc(img2);
 img2=double(img2(1:256,1:256));
+% img2=img2-min(min(img2))+100;
+% img2=255*img2/max(max(img2));
 imgPreNoise=img2;
 img2=img2.*(1+0.003*randn(size(img2)));
 img2=log(double(img2)+1e-18)/log(4);
-figure(1); imagesc(img2);
+figure(1); imagesc(img2); title('Unprocessed, multiplicative noise added')
 
 %% Decomposition
 imgo=zeros(J+1,4,size(img2,1),size(img2,2)); %#of dec,4quadrants,rows,cols
@@ -44,11 +50,11 @@ for j=2:J+1
     imgo2(j,3,:,:)=w_list{end-(j-2)*3-2};
     imgo2(j,4,:,:)=w_list{end-(j-2)*3-3};
 end
-
-imgo=adapThresh(imgo,0.3);
-imgo=adapThresh(imgo,0.3);
-imgo2=adapThresh(imgo2,0.7);
-imgo2=adapThresh(imgo2,0.7);
+% 
+imgo=adapThresh(imgo,0.5);
+imgo=adapThresh(imgo,0.5);
+imgo2=adapThresh(imgo2,0.5);
+imgo2=adapThresh(imgo2,0.5);
 
 %    for i=1:4
 %         temp=squeeze(imgo(j,i,4:end-4,4:end-4));
@@ -68,8 +74,9 @@ for j=J+1:-1:2
     g=[0 downsample(g(2:end),2)];
     h=[0 downsample(h(2:end),2)];
 end
+
 out=4.^out;
-figure(2); imagesc((out));
+figure(2); imagesc((out)); title('Denoised, J=5, Daubechies wavelet')
 % figure(2); imagesc((out(12:end-4,10:end-4)));
 % caxis([0.994 1.001]);
 
@@ -82,7 +89,7 @@ for j=2:J+1
 end
 out2=perform_wavelet_transform(w_list2,jtbx,1,cfg);
 out2=4.^out2;
-figure(3); imagesc(out2);
+figure(3); imagesc(out2); title('Denoised, J=5, toolbox transform');
 
 img2=4.^img2;
 MSE_pre = sum(sum((imgPreNoise(1:256,1:256)-img2(1:256,1:256)).^2))/numel(out)

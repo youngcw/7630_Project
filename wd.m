@@ -16,9 +16,10 @@ for z=1:4
     for i=1:size(img,1) %horizontal filter
 %         temp=cconv(f,img(i,:));
 %         Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
-        pline=[repmat(img(i,1),[1 1+(s2-1)/2]) img(i,:) repmat(img(i,end),[1 (s2-1)/2])];
+%         pline=[repmat(img(i,1),[1 1+(s2-1)/2]) img(i,:) repmat(img(i,end),[1 (s2-1)/2])];
+        pline=[fliplr(img(i,2:(s2+1)/2+1)) img(i,:) fliplr(img(i,(end-1-(s2-1)/2):end-1))];
         temp=cconv(f,pline);
-        Q(i,:)=temp(s2:end-s2);
+        Q(i,:)=temp(s2:end-s2-1);
     end
     
     temp=[];
@@ -32,9 +33,10 @@ for z=1:4
 %         
 %         temp=cconv(f,Q(i,:));
 %         Q(i,:)=temp(1+(s2-1)/2:end-(s2-1)/2);
-        pline=[repmat(Q(i,1),[1 1+(s2-1)/2]) Q(i,:) repmat(Q(i,end),[1 (s2-1)/2])];
+%         pline=[repmat(Q(i,1),[1 1+(s2-1)/2]) Q(i,:) repmat(Q(i,end),[1 (s2-1)/2])];
+        pline=[fliplr(Q(i,2:1+(s2+1)/2)) Q(i,:) fliplr(Q(i,(end-1-(s2-1)/2):end-1))];
         temp=cconv(f,pline);
-        Q(i,:)=temp(s2:end-s2);
+        Q(i,:)=temp(s2:end-s2-1);
     end
     Q=Q';
 %     Q=Q./2;

@@ -2,7 +2,7 @@ function dhat=adapThresh(d, mthresh)
 [J, I, M, N]=size(d); %#ok<*ASGLU>
 dno1=(d(2:end,2:end,:,:));
 % sig2=median(abs(dno1(:)))/0.6745;
-sig2=median(dno1(:));
+sig2=abs(median(dno1(:)));
 dhat=d;
 
 
